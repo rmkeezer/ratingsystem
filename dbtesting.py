@@ -60,25 +60,29 @@ def findRatings(out_db, in_db="", games_db=""):
         metaurl TEXT,
         release_date TEXT)''')
     out_c.execute('''CREATE TABLE IF NOT EXISTS categories
-        (game_id INT PRIMARY KEY,
+        (game_id INT,
         id INT,
-        description TEXT)''')
+        description TEXT,
+        PRIMARY KEY(game_id, id))''')
     out_c.execute('''CREATE TABLE IF NOT EXISTS genres
-        (game_id INT PRIMARY KEY,
+        (game_id INT,
         id INT,
-        description TEXT)''')
+        description TEXT,
+        PRIMARY KEY(game_id, id))''')
     out_c.execute('''CREATE TABLE IF NOT EXISTS screenshots
-        (game_id INT PRIMARY KEY,
+        (game_id INT,
         id INT,
         path_thumbnail TEXT,
-        path_full TEXT)''')
+        path_full TEXT,
+        PRIMARY KEY(game_id, id))''')
     out_c.execute('''CREATE TABLE IF NOT EXISTS movies
-        (game_id INT PRIMARY KEY,
+        (game_id INT,
         id INT,
         name TEXT,
         thumbnail TEXT,
         webm480 TEXT,
-        webm TEXT)''')
+        webm TEXT,
+        PRIMARY KEY(game_id, id))''')
     out_db.commit()
     if in_db == "":
         add_from_steam(out_db, games_db)
@@ -152,7 +156,7 @@ def add_game(appid, name, db):
                         c.execute('''INSERT OR IGNORE INTO movies VALUES(?,?,?,?,?,?)''', values)
                 db.commit()
         print('ADDED GAME ' + name)
-        time.sleep(1)
+        time.sleep(0.5)
         return True
     except:
         print('FAILED TO GET GAME ' + name)
