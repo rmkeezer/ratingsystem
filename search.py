@@ -10,10 +10,11 @@ enc = sys.stdout.encoding
 # Function for reading command line arguments
 def processArguments(argv):
     # Get optcodes and input from cammand line arguments
-    opts, args = getopt.getopt(argv,"i:o:g:",["indb=","outdb=","gamesdb="])
+    opts, args = getopt.getopt(argv,"i:o:g:t:",["indb=","outdb=","gamesdb=","type="])
     in_db = ""
     out_db = ""
     games_db = ""
+    stype = ""
     for opt, arg in opts:
         if opt in ("-i", "--indb"):
             in_db = arg
@@ -21,12 +22,15 @@ def processArguments(argv):
             out_db = arg
         elif opt in ("-g", "--gamesdb"):
             games_db = arg
-    if out_db == "":# or in_db == "":
+        elif opt in ("-t", "--type"):
+            stype = arg
+    if stype == "" or out_db == "":# or in_db == "":
+        # <type> - type of search (games, images, etc)
         # <inputdb> - name of the input db file
         # <outputdb> - name of the output db file
-        print ("Please use: python search.py -i <inputdb> -o <outputdb>")
+        print ("Please use: python search.py -t <type> -i <inputdb> -o <outputdb>")
     else:
-        return (out_db, in_db, games_db)
+        return (stype, (out_db, in_db, games_db))
 
 # Reads term from games.db,
 # adds resulting IDs to test.db
@@ -43,4 +47,6 @@ def findGames(out_db, in_db="", games_db=""):
 if __name__ == "__main__":
     args = processArguments(sys.argv[1:])
     if args != None:
-        findGames(*args)
+        stype, args = args
+        if stype == "games":
+            findGames(*args)
